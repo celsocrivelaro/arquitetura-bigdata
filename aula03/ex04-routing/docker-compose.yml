@@ -1,0 +1,28 @@
+version: '3'
+services:
+  fila:
+    image: rabbitmq:management
+  producer:
+    image: celsocrivelaro/python3-pika
+    volumes:
+      - .:/app
+    links:
+      - fila
+  consumer_error:
+    image: celsocrivelaro/python3-pika
+    volumes:
+      - .:/app
+    links:
+      - fila
+    depends_on:
+      - fila
+    command: ["./wait-for-it.sh", "fila:5672", "--", "python", "-u", "consumer.py", "warning", "error"]
+  consumer_info:
+    image: celsocrivelaro/python3-pika
+    volumes:
+      - .:/app
+    links:
+      - fila
+    depends_on:
+      - fila
+    command: ["./wait-for-it.sh", "fila:5672", "--", "python", "-u", "consumer.py", "info"]

@@ -17,5 +17,3 @@ services:
     depends_on:
       - fila
     command: ["./wait-for-it.sh", "fila:5672", "--", "python", "-u", "consumer.py"]
-
-# docker-compose scale consumer=2
