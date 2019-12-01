@@ -1,13 +1,10 @@
+from page_view_model import PageView
 import faust
 
 app = faust.App(
     'page_views',
     broker='kafka://kafka:9092'
 )
-
-class PageView(faust.Record):
-    id: str
-    user: str
 
 page_view_topic = app.topic('page_views', value_type=PageView)
 page_views = app.Table('page_views', default=int)
